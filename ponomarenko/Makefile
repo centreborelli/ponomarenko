@@ -1,6 +1,5 @@
 # Makefile created with Create Makefile.sh 13/12/2011
 
-COPT      = -O99
 ifeq ($(shell uname), Darwin)  # If macOS
 OpenMP=-Xpreprocessor -fopenmp
 LOpenMP=-lomp
@@ -8,9 +7,10 @@ else
 OpenMP=-fopenmp
 LOpenMP=-lgomp
 endif
+COPT      = -O3
 CFLAGS    = $(COPT) $(OpenMP)
 CSTRICT   = -Wall -Wextra -ansi
-CXXOPT    = -O99
+CXXOPT    = -O3
 CXXFLAGS  = $(CXXOPT) $(OpenMP)
 CXXSTRICT = -Wall -Wextra -ansi
 LDFLAGS   = -lpng -lm -lfftw3f -lfftw3f_threads $(LOpenMP)

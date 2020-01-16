@@ -456,14 +456,11 @@ int ponomarenko(float *image, int width, int height,
   // CHH We copy "image", the input, into "channel", which belongs to "input"
   float *channel = input.get_channel(0);
   memcpy(channel, image, sizeof(float) * width * height);
-  printf("So far so good 0\n");
 
   // Get image properties
   int Nx = input.get_width();
   int Ny = input.get_height();
   int num_channels = input.get_num_channels();
-
-  printf("Nx = %d, Ny = %d, num_channels = %d\n", Nx, Ny, num_channels);
 
   // Set number of bins
   if (num_bins <= 0) num_bins = Nx * Ny / 42000;
@@ -519,24 +516,19 @@ int ponomarenko(float *image, int width, int height,
   // Process each channel
   for (int ch = 0; ch < num_channels; ch++) {
     float *u = input.get_channel(ch);
-    printf("So far so good 1\n");
 
     read_all_valid_blocks(blocks, u, Nx, Ny, w, num_blocks, mask_all);
-    printf("So far so good 2\n");
 
     // Compute means
     compute_means(means, blocks, w, num_blocks);
-    printf("So far so good 3\n");
 
     // Compute 2D-DCT of all the blocks
     //
     // Transform blocks with FFTW
     fftwf_execute_r2r(fft_plan, blocks, blocks);
-    printf("So far so good 4\n");
 
     // Normalize FFTW output
     normalize_FFTW(blocks, w, num_blocks);
-    printf("So far so good 5\n");
 
     // Create a list of pointers of the groups
     float **blocks_ptr = new float*[num_blocks];
@@ -548,7 +540,6 @@ int ponomarenko(float *image, int width, int height,
                                                   blocks_ptr,
                                                   means,
                                                   num_blocks);
-    printf("So far so good 6\n");
 
     // Process each bin
     #ifdef _OPENMP
@@ -592,10 +583,8 @@ int ponomarenko(float *image, int width, int height,
       delete[] VH;
       delete[] indices_VL;
     }
-    printf("So far so good 7\n");
 
     delete[] blocks_ptr;
-    printf("So far so good 8\n");
   }
 
   // Filter noise curve
@@ -610,7 +599,6 @@ int ponomarenko(float *image, int width, int height,
                    &new_std_control[ch*num_bins],
                    D, allow_up);
     }
-  printf("So far so good 9\n"); std::cout << std::flush;
 
   // Print results
   for (int bin = 0; bin < num_bins; bin++) {
@@ -624,7 +612,6 @@ int ponomarenko(float *image, int width, int height,
     //
     printf("\n");
   }
-  printf("So far so good 10\n"); std::cout << std::flush;
 
   // CHH copy results for python
   memcpy(bin_mean, vmeans, sizeof(float) * num_bins);
@@ -634,7 +621,6 @@ int ponomarenko(float *image, int width, int height,
   fftwf_destroy_plan(fft_plan);
   fftwf_cleanup_threads();
   fftwf_cleanup();
-  printf("So far so good 11\n"); std::cout << std::flush;
 
   // Clean up memory
   if (mask_all != NULL) delete[] mask_all;
@@ -644,34 +630,22 @@ int ponomarenko(float *image, int width, int height,
   delete[] means;
   delete[] blocks;
   // delete fw;
-  printf("So far so good 12\n"); std::cout << std::flush;
+  return 0;
  }
-
-extern "C" int ponomarenko_c(
-  float *image, int width, int height,
-  int w,                              // Block side
-  float p,                            // Percentile
-  int num_bins,                       // Number of bins
-  int D,                              // Filtering distance
-  int curve_filter_iterations,        // Filter curve iterations
-  int mean_method,                    // Mean computation method
-  bool remove_equal_pixels_blocks,    // Flag to remove equal pixels
-  float* bin_mean,                    // Return vector (length num_bins)
-  float* bin_std);                    // Return vector (length num_bins)
 
 extern "C"
 {
   int ponomarenko_c(
       float *image, int width, int height,
-      int w,
-      float p,
-      int num_bins,
-      int D,
-      int curve_filter_iterations,
-      int mean_method,
-      bool remove_equal_pixels_blocks,
-      float *bin_mean,
-      float *bin_std)
+      int w,                              // Block side
+      float p,                            // Percentile
+      int num_bins,                       // Number of bins
+      int D,                              // Filtering distance
+      int curve_filter_iterations,        // Filter curve iterations
+      int mean_method,                    // Mean computation method
+      bool remove_equal_pixels_blocks,    // Flag to remove equal pixels
+      float *bin_mean,                    // Return vector (length num_bins)
+      float *bin_std)                     // Return vector (length num_bins)
   {
     return ponomarenko(image, width, height, w, p, num_bins, D,
         curve_filter_iterations, mean_method, remove_equal_pixels_blocks,
