@@ -74,7 +74,7 @@ def estimate_noise(image, w=8, p=0.005, remove_equal_pixels_blocks=False,
                 the bin.
     """
 
-    assert image.ndim == 2, 'the input image must have only one channel'
+    assert image.ndim == 2, 'input must be a gray image'
 
     image = image.astype(np.float32)
     height, width = image.shape
