@@ -600,7 +600,7 @@ int ponomarenko(float *image, int width, int height,
                    D, allow_up);
     }
 
-  // Print results
+  /* Print results
   for (int bin = 0; bin < num_bins; bin++) {
     // Means
     for (int ch = 0; ch < num_channels; ch++)
@@ -611,7 +611,7 @@ int ponomarenko(float *image, int width, int height,
         printf("%f  ", new_std_control[ch*num_bins+bin]);
     //
     printf("\n");
-  }
+  } */
 
   // CHH copy results for python
   memcpy(bin_mean, vmeans, sizeof(float) * num_bins);
