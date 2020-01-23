@@ -11,7 +11,7 @@ COPT      = -O3
 CFLAGS    = $(COPT) $(OpenMP)
 CSTRICT   = -Wall -Wextra -ansi
 CXXOPT    = -O3
-CXXFLAGS  = $(CXXOPT) $(OpenMP)
+CXXFLAGS  = $(CXXOPT) $(OpenMP) -fPIC
 CXXSTRICT = -Wall -Wextra -ansi
 LDFLAGS   = -lpng -lm -lfftw3f -lfftw3f_threads $(LOpenMP)
 EXEC      = ponomarenko
@@ -55,14 +55,13 @@ $(EXEC):  ./framework/CFramework.o ./framework/libparser.o ./framework/CHistogra
 	$(CXX)  ./framework/CFramework.o ./framework/libparser.o ./framework/CHistogram.o ./framework/CImage.o ./framework/CInspector.o ./framework/framework.o ./framework/operations.o ./curve_filter.o ./algo.o $(LDFLAGS) -o $(EXEC)
 
 $(LIB):  ./framework/CFramework.o ./framework/libparser.o ./framework/CHistogram.o ./framework/CImage.o ./framework/CInspector.o ./framework/operations.o ./curve_filter.o ./algo.o
-	$(CXX) -shared -fPIC $^ $(LDFLAGS) -o $(LIB)
-	rm -f *.o
+	$(CXX) $^ $(LDFLAGS) -o $(LIB) -fPIC -shared
 
 lint:
 	$(MAKE) CFLAGS="$(CFLAGS) $(CSTRICT)" CXXFLAGS="$(CXXFLAGS) $(CXXSTRICT)"
 
 clean:
-	rm -f *.o *.so
+	rm -f *.o *.so framework/*.o
 
 distclean: clean
 	rm -f $(EXEC)
