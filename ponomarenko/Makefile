@@ -55,7 +55,7 @@ $(EXEC):  ./framework/CFramework.o ./framework/libparser.o ./framework/CHistogra
 	$(CXX)  ./framework/CFramework.o ./framework/libparser.o ./framework/CHistogram.o ./framework/CImage.o ./framework/CInspector.o ./framework/framework.o ./framework/operations.o ./curve_filter.o ./algo.o $(LDFLAGS) -o $(EXEC)
 
 $(LIB):  ./framework/CFramework.o ./framework/libparser.o ./framework/CHistogram.o ./framework/CImage.o ./framework/CInspector.o ./framework/operations.o ./curve_filter.o ./algo.o
-	$(CXX) -shared -fpic $^ $(LDFLAGS) -o $(LIB)
+	$(CXX) -shared -fPIC $^ $(LDFLAGS) -o $(LIB)
 	rm -f *.o
 
 lint:
