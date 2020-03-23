@@ -3,7 +3,7 @@
 Python bindings for Miguel Colom's implementation of the Ponomarenko et al.
 method.
 
-Version 0.0.3 -- March 23, 2020
+Version 0.0.4 -- March 23, 2020
 
 By Charles Hessel <charles.hessel@ens-paris-saclay.fr>
 
