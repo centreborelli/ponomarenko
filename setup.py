@@ -31,9 +31,11 @@ class CustomBuildPy(build_py.build_py, object):
     Class needed for "pip install ponomarenko"
     """
     def run(self):
-        super(CustomBuildPy, self).run()
         subprocess.check_call("(cd ponomarenko && make lib)", shell=True)
-        subprocess.check_call("cp -r ponomarenko/libpono.so build/lib/", shell=True)
+        libdir = os.path.join(self.build_lib, module)
+        self.mkpath(libdir)
+        subprocess.check_call("cp -r ponomarenko/libpono.so {}".format(libdir), shell=True)
+        super(CustomBuildPy, self).run()
 
 requirements = ['numpy>=1.12']
 

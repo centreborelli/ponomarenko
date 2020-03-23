@@ -1,0 +1,3 @@
+include __about__.py
+recursive-include ponomarenko/ *
+
